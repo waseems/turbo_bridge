@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Chris Williams"]
   s.email       = ["chris@wellnessfx.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Ruby library for using the TurboBridge API}
+  s.description = %q{Ruby library for using the TurboBridge conference calling API described at http://www.turbobridge.com/api/2.0/}
 
   s.rubyforge_project = "turbo_bridge"
 
@@ -18,7 +18,8 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  # specify any dependencies here; for example:
-  # s.add_development_dependency "rspec"
-  # s.add_runtime_dependency "rest-client"
+  s.add_development_dependency 'rspec', '~> 2.11'
+
+  s.add_runtime_dependency 'faraday', '~> 0.8'
+  s.add_runtime_dependency 'hashie', '~> 1'
 end
