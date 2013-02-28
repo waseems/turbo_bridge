@@ -60,10 +60,15 @@ describe "TurboBridge" do
       @bridge = TurboBridge::Bridge.create!(conference_id: conf_id, name: "Automated Test Bridge; Nuke at Will")
       @manager = TurboBridge::LiveManager.new(conference_id: conf_id)
     end
-    it "can make calls" do
-      @manager.make_call(:number => TEST_OUTGOING_NUMBER)
+    after do
+      TurboBridge::Bridge.destroy!(TEST_CONFERENCE_ID)
     end
-
+    it "can make calls" do
+      # Don't modify objects that someone gives you
+      # They're a gift. Treat them with respect
+      my_options = {}.freeze
+      @manager.make_call(TEST_OUTGOING_NUMBER, my_options)
+    end
   end
 
   context "any API call" do

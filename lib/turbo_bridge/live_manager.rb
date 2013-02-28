@@ -9,9 +9,10 @@ module TurboBridge
 
 
     def make_call(number, options = {})
-      options[:conference_id] ||= conference_id || bridge && bridge.conference_id
-      options[:number] = Util.format_phone_number(number)
-      result = Api.request('LCM', 'makeCall', options)
+      my_options = options.dup # Unfreeze a frozen object
+      my_options[:conference_id] = my_options[:conference_id] || conference_id || bridge && bridge.conference_id
+      my_options[:number] = Util.format_phone_number(number)
+      result = Api.request('LCM', 'makeCall', my_options)
       # Not sure what to expect here...
     end
 
