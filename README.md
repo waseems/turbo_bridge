@@ -29,3 +29,14 @@ Then you can go ahead and play with bridges:
 Note that the specs run LIVE tests against TurboBridge, and require real account info to do so; you will need to create a 'test_config.yml' file with access credentials; see `test_config.yml.example` for the format.
 
 The tests will create (and if successful, clean up) a test bridge with conference ID 5555555555.
+
+The "makeCall" test needs a real phone number to test making an outgoing
+call. Your account with TurboBridge will also need to have outgoing
+calls enabled (these are disabled by default).
+
+Once this is setup, specify the phone you'd like to use for the tests
+with the PHONE environment variable... e.g.
+
+```
+PHONE=4155551234 rspec spec
+```
