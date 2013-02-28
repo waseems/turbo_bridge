@@ -7,9 +7,14 @@ module TurboBridge
       class ConferenceAlreadyExists < TurboBridge::Error; end
     end
 
+    def self.request(action, options = {})
+      action ="#{action}Bridge" + (action == 'get' ? 's' : '')
+      Api.request('Bridge', action, options)
+    end
+
     def self.create!(attrs)
       begin
-        new(Api.request('set', 'Bridge', attrs.merge(editMode: 'createOnly'))["bridge"])
+        new(Api.request('Bridge', 'setBridge', attrs.merge(editMode: 'createOnly'))["bridge"])
       rescue TurboBridge::Api::Error => err
         if err.code == 'ERR_API_DUPLICATE_CONFERENCEID'
           raise Error::ConferenceAlreadyExists
@@ -20,7 +25,7 @@ module TurboBridge
     end
 
     def self.find(conference_id)
-      found = Api.request('get', 'Bridge', conference_id: conference_id)
+      found = Api.request('Bridge', 'getBridges', conference_id: conference_id)
       raise Error::BridgeNotFound unless found["total_results"] == 1
       new(found["bridge"][0])
     end
@@ -31,7 +36,7 @@ module TurboBridge
 
     def update_attributes!(attrs)
       begin
-        self.attributes = Api.request('set', 'Bridge', attrs.merge(conference_id: conference_id, editMode: 'modifyOnly'))["bridge"]
+        self.attributes = Api.request('Bridge', 'setBridge', attrs.merge(conference_id: conference_id, editMode: 'modifyOnly'))["bridge"]
       rescue TurboBridge::Api::Error => err
         if err.code == 'ERR_API_CONFERENCEID_NOT_FOUND'
           raise Error::BridgeNotFound
@@ -44,7 +49,7 @@ module TurboBridge
 
     def self.destroy!(conference_id)
       begin
-        !!Api.request('delete', 'Bridge', conference_id: conference_id)
+        !!Api.request('Bridge', 'deleteBridge', conference_id: conference_id)
       rescue TurboBridge::Api::Error => err
         if err.code == 'ERR_API_CONFERENCEID_NOT_FOUND'
           raise Error::BridgeNotFound

@@ -54,6 +54,18 @@ describe "TurboBridge" do
     end.should raise_error(TurboBridge::Bridge::Error::BridgeNotFound)
   end
 
+  context "live manager" do
+    before do
+      conf_id = TEST_CONFERENCE_ID
+      @bridge = TurboBridge::Bridge.create!(conference_id: conf_id, name: "Automated Test Bridge; Nuke at Will")
+      @manager = TurboBridge::LiveManager.new(conference_id: conf_id)
+    end
+    it "can make calls" do
+      @manager.make_call(:number => '4152980615')
+    end
+
+  end
+
   context "any API call" do
     subject do
       TurboBridge::Bridge.find("123456")

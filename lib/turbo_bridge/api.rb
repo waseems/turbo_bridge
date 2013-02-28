@@ -24,19 +24,19 @@ module TurboBridge
         end
       end
 
-      def request(method, cls, params)
+      def request(url_suffix, api_method, params)
         request = { request: {
             outputFormat: 'json',
             authAccount: translate_keys_outgoing(auth_details),
             requestList: [
                 {
                     id: '1',
-                    "#{method}#{cls}" + (method == 'get' ? 's' : '') => translate_keys_outgoing(params)
+                    api_method => translate_keys_outgoing(params)
                 }
             ]
         }}
         response = connection.post do |req|
-          req.url "#{cls}"
+          req.url "#{url_suffix}"
           req.body = JSON.dump(request) #.tap {|s| puts s}
         end
         raise Error.new(response.status, response.body) unless response.status == 200
