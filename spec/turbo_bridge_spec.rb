@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 TEST_CONFERENCE_ID = '5555555555'
-
+TEST_OUTGOING_NUMBER = ENV['PHONE'] || '4155551234'
 describe "TurboBridge" do
   before(:all) do
     # Make sure our test conference doesn't already exist
@@ -61,7 +61,7 @@ describe "TurboBridge" do
       @manager = TurboBridge::LiveManager.new(conference_id: conf_id)
     end
     it "can make calls" do
-      @manager.make_call(:number => '4152980615')
+      @manager.make_call(:number => TEST_OUTGOING_NUMBER)
     end
 
   end
