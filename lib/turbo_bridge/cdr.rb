@@ -11,7 +11,7 @@ module TurboBridge
     end
 
     def self.find(conference_id, start_begin=0, start_end=0)
-      found = Api.request(@@suffix, 'getConferenceCDR', conference_id: conference_id, confStartBeginTimestamp: start_begin, confStartBeginTimestamp: start_end)
+      found = Api.request(@@suffix, 'getConferenceCDR', conference_id: conference_id, confStartBeginTimestamp: start_begin, confStartEndTimestamp: start_end)
 #      raise Error::CdrNotFound unless found["total_results"] == 1
 #      new(found["cdr"][0])
     end
