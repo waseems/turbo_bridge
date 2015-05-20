@@ -15,6 +15,8 @@ module TurboBridge
       Api.request(@@suffix, 'getConferenceCDR', params)["conference_cdr"].map { |found|
         new(found)
       }
+    rescue
+      []
     end
 
     # expect just one result
