@@ -7,13 +7,21 @@ module TurboBridge
 
     module Error
       class CdrNotFound < TurboBridge::Error; end
-      #class ConferenceAlreadyExists < TurboBridge::Error; end
     end
 
-    def self.find(conference_id, start_begin=0, start_end=0)
-      found = Api.request(@@suffix, 'getConferenceCDR', conference_id: conference_id, confStartBeginTimestamp: start_begin, confStartEndTimestamp: start_end)
-#      raise Error::CdrNotFound unless found["total_results"] == 1
-#      new(found["cdr"][0])
+    # create an object for every result
+    # looks like its sorted by date by default
+    def self.where(params={})
+      Api.request(@@suffix, 'getConferenceCDR', params)["conference_cdr"].map { |found|
+        new(found)
+      }
+    end
+
+    # expect just one result
+    def self.find(cdr_id)
+      found = Api.request(@@suffix, 'getConferenceCDR', cdr_id: cdr_id)
+      raise Error::CdrNotFound unless found["total_results"] == 1
+      new(found["conference_cdr"].first)
     end
 
     def initialize(attrs)
@@ -21,6 +29,7 @@ module TurboBridge
     end
 
     private
+
     def attributes=(attrs)
       # We are read-only, updates must be done via #update_attributes!
       @attributes = Hashie::Mash.new(attrs).freeze
